@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+
+    <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+        <h2 id="form-title" class="text-2xl font-semibold text-center mb-4">Login</h2>
+        
+        <div class="space-y-4">
+            <input type="text" id="email" placeholder="Email" class="w-full p-2 border rounded">
+            <input type="password" id="password" placeholder="Password" class="w-full p-2 border rounded">
+            <button id="auth-btn" class="w-full bg-blue-500 text-white p-2 rounded">Login</button>
+        </div>
+
+        <p class="text-center mt-4 text-sm">
+            <span id="toggle-text">Don't have an account?</span>
+            <button id="toggle-btn" class="text-blue-500 font-semibold">Register</button>
+        </p>
+    </div>
+    <script src="login.js"></script>
+
+</body>
+</html>
