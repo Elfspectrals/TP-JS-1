@@ -13,17 +13,24 @@
 
         <div class="mb-4">
             <p id="welcome-msg" class="text-center text-gray-700"></p>
-            <button id="logout-btn" class="w-full bg-red-500 text-white p-2 rounded mt-2">Logout</button>
         </div>
-
-        <div class="mb-4 flex">
-            <input type="text" id="task-input" placeholder="Add a new task" class="flex-1 p-2 border rounded-l">
-            <button id="add-task-btn" class="bg-blue-500 text-white px-4 rounded-r">Add</button>
+        
+        <div class="mb-4 flex flex-col space-y-2">
+            <input type="text" id="task-title" placeholder="Title" class="p-2 border rounded">
+            <input type="text" id="task-description" placeholder="Description" class="p-2 border rounded">
+            <select id="task-status" class="p-2 border rounded">
+                <option value="not started">Not Started</option>
+                <option value="in progress">In Progress</option>
+                <option value="done">Done</option>
+            </select>
+            <input type="date" id="task-deadline" placeholder="Deadline" class="p-2 border rounded">
+            <button id="add-task-btn" class="bg-blue-500 text-white px-4 py-2 rounded">Add</button>
         </div>
-
+        
         <ul id="task-list" class="space-y-2"></ul>
+        <button id="logout-btn" class="w-full bg-red-500 text-white p-2 rounded mt-2">Logout</button>
     </div>
-
+    
     <script src="todolist.js"></script>
 
 </body>

@@ -6,7 +6,10 @@ if (!storedUser) {
 
 document.getElementById("welcome-msg").innerText = `Welcome, ${storedUser.email}!`;
 
-const taskInput = document.getElementById("task-input");
+const taskTitle = document.getElementById("task-title");
+const taskDescription = document.getElementById("task-description");
+const taskStatus = document.getElementById("task-status");
+const taskDeadline = document.getElementById("task-deadline");
 const addTaskBtn = document.getElementById("add-task-btn");
 const taskList = document.getElementById("task-list");
 const logoutBtn = document.getElementById("logout-btn");
@@ -17,24 +20,44 @@ function renderTasks() {
     taskList.innerHTML = "";
     tasks.forEach((task, index) => {
         const li = document.createElement("li");
-        li.className = "flex justify-between items-center bg-gray-200 p-2 rounded";
+        li.className = "flex flex-col bg-gray-200 p-2 rounded mb-2";
         li.innerHTML = `
-            <span>${task}</span>
-            <button onclick="deleteTask(${index})" class="text-red-500 font-bold">X</button>
+            <strong>${task.title}</strong>
+            <p>${task.description}</p>
+            <p><em>Status:</em> ${task.status}</p>
+            <p><em>Deadline:</em> ${task.deadline}</p>
+            <button onclick="deleteTask(${index})" class="text-red-500 font-bold mt-2">X</button>
         `;
         taskList.appendChild(li);
     });
 }
 
 addTaskBtn.addEventListener("click", () => {
-    const task = taskInput.value.trim();
-    if (task) {
-        tasks.push(task);
-        localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks)); 
-        taskInput.value = "";
+    const newTask = {
+        title: taskTitle.value.trim(),
+        description: taskDescription.value.trim(),
+        status: taskStatus.value,
+        deadline: taskDeadline.value.trim()
+    };
+
+    if (newTask.title && newTask.description && newTask.status && newTask.deadline) {
+        tasks.push(newTask);
+        localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
+        taskTitle.value = "";
+        taskDescription.value = "";
+        taskStatus.value = "not started";
+        taskDeadline.value = "";
         renderTasks();
     }
 });
+
+taskStatus.innerHTML = `
+    <option value="not started">Not Started</option>
+    <option value="in progress">In Progress</option>
+    <option value="done">Done</option>
+`;
+
+taskStatus.value = "not started";
 
 function deleteTask(index) {
     tasks.splice(index, 1);
