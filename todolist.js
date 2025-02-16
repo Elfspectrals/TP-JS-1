@@ -18,9 +18,10 @@ let tasks = JSON.parse(localStorage.getItem(`tasks_${storedUser.email}`)) || [];
 
 function renderTasks(filter = "") {
     taskList.innerHTML = "";
+    taskList.className = "max-h-80 overflow-y-auto p-2";
     tasks.filter(task => task.title.toLowerCase().includes(filter.toLowerCase())).forEach((task, index) => {
         const li = document.createElement("li");
-        li.className = "flex flex-col bg-gray-200 p-2 rounded mb-2";
+        li.className = `flex flex-col p-2 rounded mb-2 ${getTaskBgColor(task.status)}`;
         li.innerHTML = `
             <strong>${task.title}</strong>
             <p>${task.description}</p>
@@ -32,10 +33,19 @@ function renderTasks(filter = "") {
                 </select>
             </p>
             <p><em>Deadline:</em> ${task.deadline}</p>
-            <button onclick="deleteTask(${index})" class="text-red-500 font-bold mt-2">X</button>
+            <button onclick="deleteTask(${index})" class="text-red-500 font-bold mt-2 text-4xl">X</button>
         `;
         taskList.appendChild(li);
     });
+}
+
+function getTaskBgColor(status) {
+    switch (status) {
+        case "done": return "bg-green-700";
+        case "in progress": return "bg-yellow-600";
+        case "not started": return "bg-slate-600";
+        default: return "bg-slate-600";
+    }
 }
 
 function updateTaskStatus(index, newStatus) {
@@ -59,10 +69,13 @@ addTaskBtn.addEventListener("click", () => {
     if (newTask.title && newTask.description && newTask.deadline) {
         tasks.push(newTask);
         localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
-        taskTitle.value = "";
+        taskTitle.value = "" ;
         taskDescription.value = "";
         taskDeadline.value = "";
         renderTasks();
+    }
+    else {
+        alert("Please fill in all fields!");
     }
 });
 
