@@ -16,20 +16,36 @@ const logoutBtn = document.getElementById("logout-btn");
 
 let tasks = JSON.parse(localStorage.getItem(`tasks_${storedUser.email}`)) || [];
 
-function renderTasks() {
+function renderTasks(filter = "") {
     taskList.innerHTML = "";
-    tasks.forEach((task, index) => {
+    tasks.filter(task => task.title.toLowerCase().includes(filter.toLowerCase())).forEach((task, index) => {
         const li = document.createElement("li");
         li.className = "flex flex-col bg-gray-200 p-2 rounded mb-2";
         li.innerHTML = `
             <strong>${task.title}</strong>
             <p>${task.description}</p>
-            <p><em>Status:</em> ${task.status}</p>
+            <p><em>Status:</em> 
+                <select onchange="updateTaskStatus(${index}, this.value)">
+                    <option value="not started" ${task.status === "not started" ? "selected" : ""}>Not Started</option>
+                    <option value="in progress" ${task.status === "in progress" ? "selected" : ""}>In Progress</option>
+                    <option value="done" ${task.status === "done" ? "selected" : ""}>Done</option>
+                </select>
+            </p>
             <p><em>Deadline:</em> ${task.deadline}</p>
             <button onclick="deleteTask(${index})" class="text-red-500 font-bold mt-2">X</button>
         `;
         taskList.appendChild(li);
     });
+}
+
+document.getElementById("search-bar").addEventListener("input", (e) => {
+    renderTasks(e.target.value);
+});
+
+function updateTaskStatus(index, newStatus) {
+    tasks[index].status = newStatus;
+    localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
+    renderTasks();
 }
 
 addTaskBtn.addEventListener("click", () => {
@@ -50,14 +66,6 @@ addTaskBtn.addEventListener("click", () => {
         renderTasks();
     }
 });
-
-taskStatus.innerHTML = `
-    <option value="not started">Not Started</option>
-    <option value="in progress">In Progress</option>
-    <option value="done">Done</option>
-`;
-
-taskStatus.value = "not started";
 
 function deleteTask(index) {
     tasks.splice(index, 1);
