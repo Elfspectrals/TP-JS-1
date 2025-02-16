@@ -8,16 +8,14 @@ document.getElementById("welcome-msg").innerText = `Welcome, ${storedUser.email}
 
 const taskTitle = document.getElementById("task-title");
 const taskDescription = document.getElementById("task-description");
-const taskStatus = document.getElementById("task-status");
 const taskDeadline = document.getElementById("task-deadline");
 const addTaskBtn = document.getElementById("add-task-btn");
 const taskList = document.getElementById("task-list");
 const logoutBtn = document.getElementById("logout-btn");
+const searchBar = document.getElementById("search-bar");
 
 let tasks = JSON.parse(localStorage.getItem(`tasks_${storedUser.email}`)) || [];
 
-
-// Function to all tasks to the list and use a param to act as a searchbar
 function renderTasks(filter = "") {
     taskList.innerHTML = "";
     tasks.filter(task => task.title.toLowerCase().includes(filter.toLowerCase())).forEach((task, index) => {
@@ -40,46 +38,40 @@ function renderTasks(filter = "") {
     });
 }
 
-// Add an event listener to the search bar
-document.getElementById("search-bar").addEventListener("input", (e) => {
-    renderTasks(e.target.value);
-});
-
-// Function to update the status of a task from done to in progress to not started
 function updateTaskStatus(index, newStatus) {
     tasks[index].status = newStatus;
     localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
     renderTasks();
 }
 
-// Add the event listener to create the task
+searchBar.addEventListener("input", (e) => {
+    renderTasks(e.target.value);
+});
+
 addTaskBtn.addEventListener("click", () => {
     const newTask = {
         title: taskTitle.value.trim(),
         description: taskDescription.value.trim(),
-        status: taskStatus.value,
+        status: "not started", // Default status since dropdown is removed
         deadline: taskDeadline.value.trim()
     };
 
-    if (newTask.title && newTask.description && newTask.status && newTask.deadline) {
+    if (newTask.title && newTask.description && newTask.deadline) {
         tasks.push(newTask);
         localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
         taskTitle.value = "";
         taskDescription.value = "";
-        taskStatus.value = "not started";
         taskDeadline.value = "";
         renderTasks();
     }
 });
 
-// Function to delete a task
 function deleteTask(index) {
     tasks.splice(index, 1);
     localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
     renderTasks();
 }
 
-//when logout just redirect to the index page
 logoutBtn.addEventListener("click", () => {
     window.location.href = "index.html"; 
 });
