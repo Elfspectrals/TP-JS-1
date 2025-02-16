@@ -6,32 +6,63 @@ if (!storedUser) {
 
 document.getElementById("welcome-msg").innerText = `Welcome, ${storedUser.email}!`;
 
-const taskInput = document.getElementById("task-input");
+const taskTitle = document.getElementById("task-title");
+const taskDescription = document.getElementById("task-description");
+const taskStatus = document.getElementById("task-status");
+const taskDeadline = document.getElementById("task-deadline");
 const addTaskBtn = document.getElementById("add-task-btn");
 const taskList = document.getElementById("task-list");
 const logoutBtn = document.getElementById("logout-btn");
 
 let tasks = JSON.parse(localStorage.getItem(`tasks_${storedUser.email}`)) || [];
 
-function renderTasks() {
+function renderTasks(filter = "") {
     taskList.innerHTML = "";
-    tasks.forEach((task, index) => {
+    tasks.filter(task => task.title.toLowerCase().includes(filter.toLowerCase())).forEach((task, index) => {
         const li = document.createElement("li");
-        li.className = "flex justify-between items-center bg-gray-200 p-2 rounded";
+        li.className = "flex flex-col bg-gray-200 p-2 rounded mb-2";
         li.innerHTML = `
-            <span>${task}</span>
-            <button onclick="deleteTask(${index})" class="text-red-500 font-bold">X</button>
+            <strong>${task.title}</strong>
+            <p>${task.description}</p>
+            <p><em>Status:</em> 
+                <select onchange="updateTaskStatus(${index}, this.value)">
+                    <option value="not started" ${task.status === "not started" ? "selected" : ""}>Not Started</option>
+                    <option value="in progress" ${task.status === "in progress" ? "selected" : ""}>In Progress</option>
+                    <option value="done" ${task.status === "done" ? "selected" : ""}>Done</option>
+                </select>
+            </p>
+            <p><em>Deadline:</em> ${task.deadline}</p>
+            <button onclick="deleteTask(${index})" class="text-red-500 font-bold mt-2">X</button>
         `;
         taskList.appendChild(li);
     });
 }
 
+document.getElementById("search-bar").addEventListener("input", (e) => {
+    renderTasks(e.target.value);
+});
+
+function updateTaskStatus(index, newStatus) {
+    tasks[index].status = newStatus;
+    localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
+    renderTasks();
+}
+
 addTaskBtn.addEventListener("click", () => {
-    const task = taskInput.value.trim();
-    if (task) {
-        tasks.push(task);
-        localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks)); 
-        taskInput.value = "";
+    const newTask = {
+        title: taskTitle.value.trim(),
+        description: taskDescription.value.trim(),
+        status: taskStatus.value,
+        deadline: taskDeadline.value.trim()
+    };
+
+    if (newTask.title && newTask.description && newTask.status && newTask.deadline) {
+        tasks.push(newTask);
+        localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
+        taskTitle.value = "";
+        taskDescription.value = "";
+        taskStatus.value = "not started";
+        taskDeadline.value = "";
         renderTasks();
     }
 });
