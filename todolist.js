@@ -16,6 +16,8 @@ const logoutBtn = document.getElementById("logout-btn");
 
 let tasks = JSON.parse(localStorage.getItem(`tasks_${storedUser.email}`)) || [];
 
+
+// Function to all tasks to the list and use a param to act as a searchbar
 function renderTasks(filter = "") {
     taskList.innerHTML = "";
     tasks.filter(task => task.title.toLowerCase().includes(filter.toLowerCase())).forEach((task, index) => {
@@ -38,16 +40,19 @@ function renderTasks(filter = "") {
     });
 }
 
+// Add an event listener to the search bar
 document.getElementById("search-bar").addEventListener("input", (e) => {
     renderTasks(e.target.value);
 });
 
+// Function to update the status of a task from done to in progress to not started
 function updateTaskStatus(index, newStatus) {
     tasks[index].status = newStatus;
     localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
     renderTasks();
 }
 
+// Add the event listener to create the task
 addTaskBtn.addEventListener("click", () => {
     const newTask = {
         title: taskTitle.value.trim(),
@@ -67,12 +72,14 @@ addTaskBtn.addEventListener("click", () => {
     }
 });
 
+// Function to delete a task
 function deleteTask(index) {
     tasks.splice(index, 1);
     localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
     renderTasks();
 }
 
+//when logout just redirect to the index page
 logoutBtn.addEventListener("click", () => {
     window.location.href = "index.html"; 
 });
