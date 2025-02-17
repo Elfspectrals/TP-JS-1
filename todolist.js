@@ -43,7 +43,7 @@ function renderTasks(filter = "") {
             </select>
         </p>
         <p><em>Deadline:</em> ${task.deadline}</p>
-        <button onclick="deleteTask(${index})" class="text-red-500 font-bold mt-2 text-4xl">X</button>
+        <button onclick="deleteTask(${index})" class="text-black-500 font-bold mt-2 text-4xl">X</button>
       `;
       taskList.appendChild(li);
     });
@@ -59,18 +59,29 @@ function getTaskBgColor(status) {
     case "in progress":
       return "bg-yellow-600";
     case "not started":
-      return "bg-slate-600";
+      return "bg-red-600";
     default:
-      return "bg-slate-600";
+      return "bg-red-600";
   }
 }
 
 
 function updateTaskStatus(index, newStatus) {
-  tasks[index].status = newStatus;
-  localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
-  renderTasks(searchBar.value); 
-}
+    tasks[index].status = newStatus;
+    localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
+    renderTasks(searchBar.value);
+    // Play audio according to the status 
+    let audio;
+    if (newStatus === "done") {
+      audio = new Audio("done.mp3");
+    } else if (newStatus === "in progress") {
+      audio = new Audio("inProgress.mp3");
+    } else {
+      return;
+    }
+    audio.volume = 0.4;
+    audio.play();
+  }
 
 // SVG of visage icon
 function updateFaceIcon() {
