@@ -8,14 +8,6 @@ Welcome to the **TodoList** project! This README will guide you through the stru
 
 - [Overview](#overview)
 - [Features](#features)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [How It Works](#how-it-works)
-- [Customization](#customization)
-- [Potential Improvements](#potential-improvements)
-- [License](#license)
-
 ---
 
 ## Overview
@@ -57,5 +49,4 @@ This application is a simple yet functional **Todo List** project that comes wit
 
 ---
 
-## Project Structure
 
