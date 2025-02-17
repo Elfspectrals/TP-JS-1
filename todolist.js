@@ -73,9 +73,9 @@ function updateTaskStatus(index, newStatus) {
     // Play audio according to the status 
     let audio;
     if (newStatus === "done") {
-      audio = new Audio("done.mp3");
+      audio = new Audio("./assets/done.mp3");
     } else if (newStatus === "in progress") {
-      audio = new Audio("inProgress.mp3");
+      audio = new Audio("./assets/inProgress.mp3");
     } else {
       return;
     }
@@ -86,7 +86,7 @@ function updateTaskStatus(index, newStatus) {
 // SVG of visage icon
 function updateFaceIcon() {
     if (tasks.length === 0) {
-      faceIcon.src = "neutralFace.svg";
+      faceIcon.src = "./assets/neutralFace.svg";
       faceIcon.className = "w-16 h-16 bg-slate-300";
       return;
     }
@@ -94,16 +94,16 @@ function updateFaceIcon() {
     const notStartedCount = tasks.filter(function(t){return t.status === "not started";}).length;
     const inProgressCount = tasks.filter(function(t){return t.status === "in progress";}).length;
     if (doneCount > notStartedCount && doneCount > inProgressCount) {
-      faceIcon.src = "happyFace.svg";
+      faceIcon.src = "./assets/happyFace.svg";
       faceIcon.className = "w-16 h-16 bg-green-300";
     } else if (notStartedCount > doneCount && notStartedCount > inProgressCount) {
-      faceIcon.src = "angryFace.svg";
+      faceIcon.src = "./assets/angryFace.svg";
       faceIcon.className = "w-16 h-16 bg-red-300";
     } else if (inProgressCount > doneCount && inProgressCount > notStartedCount) {
-      faceIcon.src = "neutralFace.svg";
+      faceIcon.src = "./assets/neutralFace.svg";
       faceIcon.className = "w-16 h-16 bg-yellow-300";
     } else {
-      faceIcon.src = "neutralFace.svg";
+      faceIcon.src = "./assets/neutralFace.svg";
       faceIcon.className = "w-16 h-16 bg-slate-300";
     }
   }
