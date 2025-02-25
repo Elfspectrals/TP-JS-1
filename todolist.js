@@ -24,10 +24,8 @@ function renderTasks(filter = "") {
   taskList.innerHTML = "";
   taskList.className = "max-h-80 overflow-y-auto p-2";
   
-  // Safely handle potential undefined titles
   tasks
     .filter((task) => {
-      // Convert task.title to a string if it's valid; otherwise, use an empty string
       const safeTitle = typeof task.title === "string" ? task.title.toLowerCase() : "";
       return safeTitle.includes(filter.toLowerCase());
     })
@@ -45,7 +43,11 @@ function renderTasks(filter = "") {
             </select>
         </p>
         <p><em>Deadline:</em> ${task.deadline || ""}</p>
-        <button onclick="deleteTask(${index})" class="text-black-500 font-bold mt-2 text-4xl">X</button>
+        <button onclick="deleteTask(${index})" 
+                class="text-black-500 font-bold mt-2 text-4xl ${task.status === "done" ? 'opacity-50 cursor-not-allowed' : ''}" 
+                ${task.status === "done" ? "disabled" : ""}>
+          X
+        </button>
       `;
       taskList.appendChild(li);
     });
@@ -131,6 +133,11 @@ function updateFaceIcon() {
  * @param {number} index - The index of the task to delete.
  */
 function deleteTask(index) {
+  if (tasks[index].status === "done") {
+    alert("Les tâches validées ne peuvent pas être supprimées.");
+    return;
+  }
+
   tasks.splice(index, 1);
   localStorage.setItem(`tasks_${storedUser.email}`, JSON.stringify(tasks));
   renderTasks(searchBar.value);
